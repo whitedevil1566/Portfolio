@@ -1,68 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#020617">
-<title>Abdullah Afsar | Floating AR Portfolio</title>
+<title>Abdullah Afsar | Camera Floating Portfolio</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;font-family:Inter,Arial,sans-serif;color:#fff}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;font-family:Arial,sans-serif;color:#fff}
 #camera{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;background:#000;z-index:0;display:none}
-#shade{position:fixed;inset:0;z-index:1;display:none;background:radial-gradient(circle at center,transparent 35%,rgba(0,0,0,.28) 100%)}
-#start{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:22px;z-index:10;background:radial-gradient(circle at 50% 35%,#10234a 0,#020617 62%,#000 100%)}
-.panel{width:min(94vw,440px);text-align:center;padding:30px 24px;border:1px solid rgba(96,165,250,.45);border-radius:26px;background:rgba(2,6,23,.84);backdrop-filter:blur(18px);box-shadow:0 0 70px rgba(59,130,246,.20)}
-.logo{font-size:58px;line-height:1;text-shadow:0 0 26px rgba(96,165,250,.8)}
-h1{font-size:28px;margin:12px 0 8px}.sub{color:#94a3b8;margin:0 0 22px;line-height:1.5}.btn{border:0;border-radius:14px;padding:15px 22px;background:linear-gradient(135deg,#2563eb,#38bdf8);color:white;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 0 28px rgba(59,130,246,.45)}
-.small{font-size:12px;color:#64748b;margin-top:18px;line-height:1.55}
-#top{position:fixed;z-index:4;top:12px;left:12px;right:12px;display:none;justify-content:space-between;align-items:center;gap:8px}.pill{padding:9px 12px;border-radius:999px;background:rgba(2,6,23,.62);border:1px solid rgba(96,165,250,.35);backdrop-filter:blur(10px);font-size:12px}.pill a{color:#bfdbfe;text-decoration:none}
-#center{position:fixed;z-index:3;inset:0;display:none;pointer-events:none;align-items:center;justify-content:center;perspective:900px}
-#float{width:min(82vw,410px);aspect-ratio:1.5/1;position:relative;transform-style:preserve-3d;filter:drop-shadow(0 0 28px rgba(56,189,248,.50));animation:bob 3.8s ease-in-out infinite;}
-#float::before{content:"";position:absolute;inset:-18px;border-radius:28px;background:radial-gradient(circle,rgba(56,189,248,.18),transparent 66%);filter:blur(10px);transform:translateZ(-20px)}
-.holo{position:absolute;inset:0;border-radius:22px;border:1px solid rgba(125,211,252,.85);background:linear-gradient(135deg,rgba(5,18,40,.87),rgba(7,31,64,.70));box-shadow:inset 0 0 35px rgba(56,189,248,.14),0 0 32px rgba(56,189,248,.24);overflow:hidden;backdrop-filter:blur(5px)}
-.holo::after{content:"";position:absolute;left:0;right:0;top:-22%;height:18%;background:linear-gradient(180deg,transparent,rgba(125,211,252,.18),transparent);animation:scan 2.8s linear infinite}
-.content{position:relative;padding:24px 22px 20px;height:100%;display:flex;flex-direction:column;justify-content:space-between}
-.kicker{font-size:11px;letter-spacing:2.5px;color:#7dd3fc;font-weight:800}.name{font-size:clamp(25px,7vw,37px);font-weight:900;letter-spacing:-.5px;margin-top:5px;text-shadow:0 0 16px rgba(125,211,252,.3)}.role{font-size:13px;color:#cbd5e1;margin-top:5px}.line{height:1px;background:linear-gradient(90deg,rgba(56,189,248,.75),transparent);margin:12px 0}.projects{font-size:13px;color:#e2e8f0;line-height:1.5}.projects b{color:#7dd3fc}.chips{display:flex;flex-wrap:wrap;gap:7px}.chip{font-size:10px;padding:5px 8px;border-radius:999px;border:1px solid rgba(125,211,252,.28);color:#bae6fd;background:rgba(14,116,144,.10)}
-.actions{display:flex;gap:8px}.action{pointer-events:auto;display:inline-flex;align-items:center;justify-content:center;padding:9px 11px;border-radius:10px;text-decoration:none;font-size:11px;font-weight:800;color:#fff;background:rgba(37,99,235,.28);border:1px solid rgba(125,211,252,.36)}
-#hint{position:fixed;z-index:4;display:none;left:50%;bottom:24px;transform:translateX(-50%);width:max-content;max-width:90vw;padding:9px 13px;border-radius:999px;background:rgba(2,6,23,.64);border:1px solid rgba(125,211,252,.25);backdrop-filter:blur(10px);font-size:11px;color:#cbd5e1;text-align:center}
-#error{display:none;position:fixed;z-index:12;inset:0;padding:24px;align-items:center;justify-content:center;background:#020617}.errorbox{max-width:430px;padding:24px;border:1px solid rgba(248,113,113,.35);border-radius:20px;background:#0f172a}.errorbox h2{margin-top:0}.errorbox p{color:#cbd5e1;line-height:1.5}.errorbox a{color:#93c5fd}
-@keyframes bob{0%,100%{transform:translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg)}50%{transform:translate3d(0,-15px,0) rotateX(1deg) rotateY(-1.5deg) rotateZ(.4deg)}}
-@keyframes scan{0%{top:-22%}100%{top:110%}}
+#start,#error{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(circle at 50% 35%,#10234a 0,#020617 62%,#000 100%)}
+.panel,.errorbox{width:min(94vw,460px);text-align:center;padding:30px 24px;border:1px solid rgba(96,165,250,.45);border-radius:26px;background:rgba(2,6,23,.88);backdrop-filter:blur(18px);box-shadow:0 0 70px rgba(59,130,246,.2)}
+.logo{font-size:58px;text-shadow:0 0 26px rgba(96,165,250,.8)}h1{font-size:28px;margin:12px 0 8px}.sub{color:#cbd5e1;line-height:1.5;margin:0 0 22px}.btn{border:0;border-radius:14px;padding:15px 22px;background:linear-gradient(135deg,#2563eb,#38bdf8);color:#fff;font-weight:800;font-size:16px;cursor:pointer;width:100%}.small{font-size:12px;color:#94a3b8;margin-top:18px;line-height:1.55}
+#top{position:fixed;z-index:5;top:max(12px,env(safe-area-inset-top));left:12px;right:12px;display:none;justify-content:space-between;align-items:center;gap:8px}.pill{padding:9px 12px;border-radius:999px;background:rgba(2,6,23,.62);border:1px solid rgba(96,165,250,.35);backdrop-filter:blur(10px);font-size:12px}.pill a{color:#bfdbfe;text-decoration:none}
+#center{position:fixed;z-index:4;inset:0;display:none;align-items:center;justify-content:center;pointer-events:none;padding:20px}
+#float{width:min(84vw,430px);aspect-ratio:1.48/1;animation:bob 3.2s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(56,189,248,.55));will-change:transform}
+.holo{position:relative;width:100%;height:100%;border-radius:24px;border:1px solid rgba(125,211,252,.9);background:linear-gradient(135deg,rgba(5,18,40,.88),rgba(7,31,64,.72));box-shadow:inset 0 0 35px rgba(56,189,248,.14),0 0 38px rgba(56,189,248,.28);overflow:hidden;backdrop-filter:blur(5px)}
+.holo:before{content:"";position:absolute;inset:-30%;background:radial-gradient(circle,rgba(56,189,248,.16),transparent 60%);animation:pulse 3s ease-in-out infinite}.holo:after{content:"";position:absolute;left:0;right:0;top:-18%;height:18%;background:linear-gradient(180deg,transparent,rgba(125,211,252,.2),transparent);animation:scan 2.6s linear infinite}
+.content{position:relative;z-index:1;padding:24px 22px 20px;height:100%;display:flex;flex-direction:column;justify-content:space-between}.kicker{font-size:11px;letter-spacing:2.3px;color:#7dd3fc;font-weight:800}.name{font-size:clamp(24px,7vw,37px);font-weight:900;margin-top:6px;text-shadow:0 0 16px rgba(125,211,252,.35)}.role{font-size:13px;color:#cbd5e1;margin-top:5px}.line{height:1px;background:linear-gradient(90deg,rgba(56,189,248,.75),transparent);margin:12px 0}.projects{font-size:13px;line-height:1.5}.projects b{color:#7dd3fc}.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.chip{font-size:10px;padding:5px 8px;border-radius:999px;border:1px solid rgba(125,211,252,.28);color:#bae6fd;background:rgba(14,116,144,.1)}.actions{display:flex;gap:8px;flex-wrap:wrap}.action{pointer-events:auto;display:inline-flex;align-items:center;justify-content:center;padding:9px 11px;border-radius:10px;text-decoration:none;font-size:11px;font-weight:800;color:#fff;background:rgba(37,99,235,.28);border:1px solid rgba(125,211,252,.36)}
+#hint{position:fixed;z-index:5;display:none;left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translateX(-50%);width:max-content;max-width:92vw;padding:9px 13px;border-radius:999px;background:rgba(2,6,23,.66);border:1px solid rgba(125,211,252,.25);backdrop-filter:blur(10px);font-size:11px;color:#cbd5e1;text-align:center}
+#error{display:none}.errorbox{text-align:left}.errorbox h2{margin-top:0}.errorbox p{color:#cbd5e1;line-height:1.5}.url{word-break:break-all;color:#7dd3fc;font-size:12px}
+@keyframes bob{0%,100%{transform:translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg)}50%{transform:translate3d(0,-16px,0) rotateX(1.2deg) rotateY(-1.6deg) rotateZ(.4deg)}}
+@keyframes pulse{0%,100%{transform:scale(.95);opacity:.55}50%{transform:scale(1.08);opacity:1}}@keyframes scan{0%{top:-18%}100%{top:110%}}
 </style>
 </head>
 <body>
-<video id="camera" playsinline muted autoplay></video>
-<div id="shade"></div>
-<div id="start"><div class="panel">
-  <div class="logo">◈</div>
-  <h1>Abdullah Afsar</h1>
-  <p class="sub">Scan → Camera → Floating Holographic Portfolio</p>
-  <button class="btn" id="startBtn">Open Camera &amp; Float Portfolio</button>
-  <p class="small">Allow camera access when asked. Your portfolio will appear as a floating hologram over the live camera view.</p>
-</div></div>
-<div id="top"><div class="pill">● CAMERA AR</div><div class="pill"><a href="https://whitedevil1566.github.io/Portfolio" target="_blank" rel="noopener">Full Portfolio ↗</a></div></div>
-<div id="center">
-  <div id="float">
-    <div class="holo">
-      <div class="content">
-        <div>
-          <div class="kicker">ABDULLAH AFSAR • PORTFOLIO</div>
-          <div class="name">BSCS • WEB DEVELOPER</div>
-          <div class="role">Interactive projects, AI, web &amp; computing</div>
-          <div class="line"></div>
-          <div class="projects"><b>Featured:</b> Toruk Makto League • Z-Lane Broast</div>
-          <div class="chips" style="margin-top:10px"><span class="chip">Web Development</span><span class="chip">AI</span><span class="chip">JavaScript</span><span class="chip">BSCS</span></div>
-        </div>
-        <div class="actions">
-          <a class="action" href="https://whitedevil1566.github.io/Portfolio" target="_blank" rel="noopener">Open Portfolio</a>
-          <a class="action" href="https://torukmaktoleague.com/" target="_blank" rel="noopener">Toruk Makto</a>
-          <a class="action" href="https://github.com/whitedevil1566" target="_blank" rel="noopener">GitHub</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="hint">Move the phone slowly — the hologram floats with a slight camera/parallax motion.</div>
-<div id="error"><div class="errorbox"><h2>Camera could not start</h2><p id="errorText">Please open this page on HTTPS and allow camera access.</p><p><a href="https://whitedevil1566.github.io/Portfolio" target="_blank" rel="noopener">Open the normal portfolio instead →</a></p></div></div>
+<video id="camera" autoplay muted playsinline webkit-playsinline></video>
+<div id="start"><div class="panel"><div class="logo">◈</div><h1>Abdullah Afsar</h1><p class="sub">Camera + Floating Holographic Portfolio</p><button class="btn" id="startBtn">Open Camera</button><p class="small">Tap the button, then choose <b>Allow</b> when your browser asks for camera access.</p></div></div>
+<div id="top"><div class="pill">● LIVE CAMERA</div><div class="pill"><a href="https://whitedevil1566.github.io/Portfolio" target="_blank" rel="noopener">Portfolio ↗</a></div></div>
+<div id="center"><div id="float"><div class="holo"><div class="content"><div><div class="kicker">ABDULLAH AFSAR • PORTFOLIO</div><div class="name">BSCS • WEB DEVELOPER</div><div class="role">AI • Web • Software • Computing</div><div class="line"></div><div class="projects"><b>Featured:</b> Toruk Makto League<br>Interactive portfolio & projects</div><div class="chips"><span class="chip">JavaScript</span><span class="chip">Web Development</span><span class="chip">AI</span><span class="chip">BSCS</span></div></div><div class="actions"><a class="action" href="https://whitedevil1566.github.io/Portfolio" target="_blank" rel="noopener">Open Portfolio</a><a class="action" href="https://torukmaktoleague.com/" target="_blank" rel="noopener">Toruk Makto</a><a class="action" href="https://github.com/whitedevil1566" target="_blank" rel="noopener">GitHub</a></div></div></div></div></div>
+<div id="hint">Your portfolio is floating over the live camera.</div>
+<div id="error"><div class="errorbox"><h2>Camera could not start</h2><p id="errorText"></p><p><b>Use this exact HTTPS address:</b></p><div class="url">https://whitedevil1566.github.io/Portfolio/ar.html</div><p>In Chrome/Safari, tap the site settings and make sure <b>Camera</b> is set to <b>Allow</b>. Then reload the page.</p><button class="btn" id="retryBtn">Try Again</button></div></div>
 <script>
 const video=document.getElementById('camera');
 const start=document.getElementById('start');
@@ -71,50 +38,47 @@ const center=document.getElementById('center');
 const hint=document.getElementById('hint');
 const errorBox=document.getElementById('error');
 const errorText=document.getElementById('errorText');
-const float=document.getElementById('float');
 let stream=null;
 
-async function startCamera(){
+function showError(msg){errorText.textContent=msg;errorBox.style.display='flex';start.style.display='none'}
+function stopStream(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}}
+
+async function getCamera(){
+  if(location.protocol!=='https:' && location.hostname!=='localhost' && location.hostname!=='127.0.0.1') throw new Error('This page is not using HTTPS. Open the GitHub Pages HTTPS address shown below.');
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('Your browser does not expose camera access here. Use the latest Chrome on Android or Safari/Chrome on iPhone.');
   try{
-    if(!window.isSecureContext){throw new Error('Camera access requires HTTPS. GitHub Pages should work automatically; make sure you are using the https:// link.');}
-    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){throw new Error('This browser does not support camera access. Use recent Chrome or Safari on your phone.');}
-    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false});
+    return await navigator.mediaDevices.getUserMedia({video:{facingMode:{exact:'environment'}},audio:false});
+  }catch(e1){
+    return await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});
+  }
+}
+
+async function startCamera(){
+  errorBox.style.display='none';
+  try{
+    stopStream();
+    stream=await getCamera();
     video.srcObject=stream;
-    await video.play();
     video.style.display='block';
-    document.getElementById('shade').style.display='block';
+    await video.play();
     start.style.display='none';
     top.style.display='flex';
     center.style.display='flex';
     hint.style.display='block';
-    setTimeout(()=>hint.style.opacity='0',4500);
-    enableMotion();
+    setTimeout(()=>hint.style.opacity='0',4000);
   }catch(err){
-    errorText.textContent=err && err.message ? err.message : 'Camera permission was denied or unavailable.';
-    errorBox.style.display='flex';
+    let msg='Camera permission was denied or the camera is unavailable.';
+    if(err && err.name==='NotAllowedError') msg='Camera permission was denied. Allow Camera for this website in your browser settings, then tap Try Again.';
+    else if(err && err.name==='NotFoundError') msg='No camera was found on this device.';
+    else if(err && err.name==='NotReadableError') msg='The camera is already being used by another app or browser tab.';
+    else if(err && err.message) msg=err.message;
+    showError(msg);
   }
 }
 
 document.getElementById('startBtn').addEventListener('click',startCamera);
-
-function enableMotion(){
-  const apply=(beta=0,gamma=0)=>{
-    const ry=Math.max(-8,Math.min(8,gamma*0.18));
-    const rx=Math.max(-5,Math.min(5,(beta-45)*0.08));
-    float.style.setProperty('--ry',ry+'deg');
-    float.style.setProperty('--rx',rx+'deg');
-    float.style.transform=`translate3d(0,-7px,0) rotateX(${rx}deg) rotateY(${ry}deg)`;
-  };
-  if('DeviceOrientationEvent' in window){
-    const handler=e=>apply(e.beta||0,e.gamma||0);
-    window.addEventListener('deviceorientation',handler,true);
-    if(typeof DeviceOrientationEvent.requestPermission==='function'){
-      DeviceOrientationEvent.requestPermission().catch(()=>{});
-    }
-  }
-}
-
-window.addEventListener('pagehide',()=>{if(stream)stream.getTracks().forEach(t=>t.stop());});
+document.getElementById('retryBtn').addEventListener('click',startCamera);
+window.addEventListener('pagehide',stopStream);
 </script>
 </body>
 </html>
