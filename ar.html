@@ -39,46 +39,86 @@ const hint=document.getElementById('hint');
 const errorBox=document.getElementById('error');
 const errorText=document.getElementById('errorText');
 let stream=null;
+let starting=false;
 
-function showError(msg){errorText.textContent=msg;errorBox.style.display='flex';start.style.display='none'}
-function stopStream(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}}
-
-async function getCamera(){
-  if(location.protocol!=='https:' && location.hostname!=='localhost' && location.hostname!=='127.0.0.1') throw new Error('This page is not using HTTPS. Open the GitHub Pages HTTPS address shown below.');
-  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('Your browser does not expose camera access here. Use the latest Chrome on Android or Safari/Chrome on iPhone.');
-  try{
-    return await navigator.mediaDevices.getUserMedia({video:{facingMode:{exact:'environment'}},audio:false});
-  }catch(e1){
-    return await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});
-  }
+function showError(msg){
+  errorText.textContent=msg;
+  errorBox.style.display='flex';
+  start.style.display='none';
+}
+function stopStream(){
+  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}
+}
+function isSecure(){
+  return window.isSecureContext || location.hostname==='localhost' || location.hostname==='127.0.0.1';
 }
 
 async function startCamera(){
+  if(starting) return;
+  starting=true;
   errorBox.style.display='none';
+  const btn=document.getElementById('startBtn');
+  btn.disabled=true;
+  btn.textContent='Opening camera…';
   try{
-    stopStream();
-    stream=await getCamera();
+    if(!isSecure()) throw new Error('Camera requires HTTPS. Open the GitHub Pages HTTPS link, not a downloaded HTML file.');
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      throw new Error('Camera API is unavailable in this browser. Try the latest Chrome or Safari.');
+    }
+
+    // First request: rear camera without "exact" constraints, which is more compatible.
+    let constraints={video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false};
+    try{
+      stream=await navigator.mediaDevices.getUserMedia(constraints);
+    }catch(first){
+      // Fallback for browsers that reject facingMode constraints.
+      stream=await navigator.mediaDevices.getUserMedia({video:true,audio:false});
+    }
+
     video.srcObject=stream;
     video.style.display='block';
+    await new Promise((resolve,reject)=>{
+      if(video.readyState>=2) return resolve();
+      video.onloadedmetadata=()=>resolve();
+      setTimeout(()=>reject(new Error('Camera started but video did not initialize. Please reload.')),8000);
+    });
     await video.play();
+
     start.style.display='none';
     top.style.display='flex';
     center.style.display='flex';
     hint.style.display='block';
-    setTimeout(()=>hint.style.opacity='0',4000);
+    setTimeout(()=>hint.style.opacity='0',4500);
   }catch(err){
-    let msg='Camera permission was denied or the camera is unavailable.';
-    if(err && err.name==='NotAllowedError') msg='Camera permission was denied. Allow Camera for this website in your browser settings, then tap Try Again.';
-    else if(err && err.name==='NotFoundError') msg='No camera was found on this device.';
-    else if(err && err.name==='NotReadableError') msg='The camera is already being used by another app or browser tab.';
-    else if(err && err.message) msg=err.message;
+    let msg='Could not open the camera.';
+    if(err?.name==='NotAllowedError' || err?.name==='PermissionDeniedError'){
+      msg='Camera permission was blocked. In Chrome/Safari, open site settings for this page → Camera → Allow, then reload and tap Open Camera.';
+    }else if(err?.name==='NotFoundError' || err?.name==='DevicesNotFoundError'){
+      msg='No camera was found on this device.';
+    }else if(err?.name==='NotReadableError' || err?.name==='TrackStartError'){
+      msg='The camera is busy. Close other apps/tabs using the camera and try again.';
+    }else if(err?.name==='SecurityError'){
+      msg='The browser blocked camera access for security reasons. Make sure this page is opened over HTTPS.';
+    }else if(err?.message){
+      msg=err.message;
+    }
+    stopStream();
+    video.style.display='none';
     showError(msg);
+  }finally{
+    starting=false;
+    btn.disabled=false;
+    btn.textContent='Open Camera';
   }
 }
 
-document.getElementById('startBtn').addEventListener('click',startCamera);
-document.getElementById('retryBtn').addEventListener('click',startCamera);
+document.getElementById('startBtn').addEventListener('click',startCamera,{passive:true});
+document.getElementById('retryBtn').addEventListener('click',startCamera,{passive:true});
+
+// Some browsers allow the permission request after a page gesture such as tapping anywhere.
+// We keep the explicit button as the primary path, then remove the one-shot gesture listener.
+function firstGesture(){ startCamera(); window.removeEventListener('pointerdown',firstGesture); }
+window.addEventListener('pointerdown',firstGesture,{once:true,passive:true});
+
 window.addEventListener('pagehide',stopStream);
 </script>
-</body>
-</html>
