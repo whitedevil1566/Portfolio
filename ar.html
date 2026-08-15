@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#020617">
+<title>Abdullah Afsar | AR Portfolio</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020617;font-family:Inter,Arial,sans-serif;color:#fff}
+#start{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;z-index:10;background:radial-gradient(circle at center,#0b1b38 0,#020617 65%)}
+.panel{max-width:430px;text-align:center;padding:30px;border:1px solid rgba(59,130,246,.45);border-radius:24px;background:rgba(2,6,23,.82);backdrop-filter:blur(18px);box-shadow:0 0 50px rgba(59,130,246,.2)}
+h1{font-size:30px;margin:0 0 8px}.sub{color:#94a3b8;margin:0 0 22px}.btn{border:0;border-radius:12px;padding:14px 20px;background:#3b82f6;color:white;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 0 24px rgba(59,130,246,.35)}
+.small{font-size:12px;color:#64748b;margin-top:18px;line-height:1.5}
+#ui{position:fixed;z-index:5;top:16px;left:16px;right:16px;display:none;justify-content:space-between;align-items:center}
+.badge{padding:9px 12px;border-radius:999px;background:rgba(2,6,23,.72);border:1px solid rgba(59,130,246,.35);backdrop-filter:blur(10px);font-size:12px}
+a{color:#93c5fd}
+#fallback{display:none;position:fixed;inset:0;background:linear-gradient(135deg,#020617,#0f172a);z-index:20;padding:28px;overflow:auto}
+.card{max-width:430px;margin:70px auto 30px;padding:28px;border:1px solid rgba(59,130,246,.5);border-radius:24px;background:rgba(15,23,42,.9);box-shadow:0 0 45px rgba(59,130,246,.2)}
+.card h2{font-size:28px;margin:0}.role{color:#60a5fa}.links a{display:block;margin:12px 0;padding:12px;border:1px solid #334155;border-radius:10px;text-decoration:none}
+canvas{display:block}
+</style>
+</head>
+<body>
+<div id="start"><div class="panel">
+<div style="font-size:48px">◈</div><h1>Abdullah Afsar</h1>
+<p class="sub">Interactive AR Portfolio</p>
+<button class="btn" id="startBtn">Launch AR Portfolio</button>
+<p class="small">Point your camera at a flat surface. On compatible Android browsers, your holographic portfolio will appear in the real world.</p>
+</div></div>
+<div id="ui"><div class="badge">● AR ACTIVE</div><div class="badge"><a href="index.html">Full Portfolio</a></div></div>
+<div id="fallback"><div class="card">
+<div style="font-size:42px">◈</div><h2>Abdullah Afsar</h2><p class="role">BSCS Student • Web Developer</p>
+<p>My interactive portfolio includes projects, skills and contact information.</p>
+<div class="links">
+<a href="https://whitedevil1566.github.io/Portfolio" target="_blank">Open Full Portfolio</a>
+<a href="https://torukmaktoleague.com/" target="_blank">🎮 Toruk Makto League</a>
+<a href="https://whitedevil1566.github.io/Z-Lane-Broast/" target="_blank">🍗 Z-Lane Broast</a>
+<a href="https://github.com/whitedevil1566" target="_blank">GitHub</a>
+<a href="https://wa.me/923278467464" target="_blank">WhatsApp</a>
+</div></div></div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.179.1/build/three.module.js';
+import { ARButton } from 'https://cdn.jsdelivr.net/npm/three@0.179.1/examples/jsm/webxr/ARButton.js';
+
+let camera,scene,renderer,reticle,cardGroup,hitTestSource=null,hitTestSourceRequested=false,placed=false;
+const start=document.getElementById('start'), ui=document.getElementById('ui'), fallback=document.getElementById('fallback');
+
+document.getElementById('startBtn').onclick=async()=>{
+ if(!navigator.xr){ fallback.style.display='block'; start.style.display='none'; return; }
+ try{
+  const ok=await navigator.xr.isSessionSupported('immersive-ar');
+  if(!ok){fallback.style.display='block';start.style.display='none';return;}
+  init(); renderer.xr.setSession(await navigator.xr.requestSession('immersive-ar',{requiredFeatures:['hit-test','local-floor']}));
+  start.style.display='none';ui.style.display='flex';animate();
+ }catch(e){fallback.style.display='block';start.style.display='none';}
+};
+
+function init(){
+ scene=new THREE.Scene();
+ camera=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,.01,20);
+ renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+ renderer.setPixelRatio(devicePixelRatio);renderer.setSize(innerWidth,innerHeight);
+ renderer.xr.enabled=true;document.body.appendChild(renderer.domElement);
+ scene.add(new THREE.HemisphereLight(0x9cc9ff,0x111827,2));
+ reticle=new THREE.Mesh(new THREE.RingGeometry(.08,.1,32).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({color:0x3b82f6}));
+ reticle.matrixAutoUpdate=false;reticle.visible=false;scene.add(reticle);
+ cardGroup=makeCard();cardGroup.visible=false;scene.add(cardGroup);
+ window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+}
+function makeCard(){
+ const g=new THREE.Group();
+ const panel=new THREE.Mesh(new THREE.PlaneGeometry(.9,.58),new THREE.MeshBasicMaterial({color:0x061126,transparent:true,opacity:.92,side:THREE.DoubleSide}));
+ g.add(panel);
+ const border=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.PlaneGeometry(.92,.60)),new THREE.LineBasicMaterial({color:0x3b82f6}));
+ g.add(border);
+ const glow=new THREE.Mesh(new THREE.PlaneGeometry(.82,.5),new THREE.MeshBasicMaterial({color:0x0b2a5b,transparent:true,opacity:.18}));
+ glow.position.z=.001;g.add(glow);
+ // Text is rendered as a DOM-like canvas texture.
+ const c=document.createElement('canvas');c.width=900;c.height=580;const x=c.getContext('2d');
+ x.fillStyle='#061126';x.fillRect(0,0,900,580);x.strokeStyle='#3b82f6';x.lineWidth=6;x.strokeRect(12,12,876,556);
+ x.fillStyle='#60a5fa';x.font='bold 34px monospace';x.fillText('AR PORTFOLIO',55,70);
+ x.fillStyle='white';x.font='bold 58px Arial';x.fillText('Abdullah Afsar',55,145);
+ x.fillStyle='#94a3b8';x.font='30px Arial';x.fillText('BSCS Student • Web Developer',55,195);
+ x.fillStyle='#cbd5e1';x.font='26px Arial';x.fillText('PROJECTS',55,255);
+ x.fillStyle='#e2e8f0';x.font='25px Arial';x.fillText('Toruk Makto League  •  Z-Lane Broast',55,300);
+ x.fillText('Web Development • AI • Computing',55,340);
+ x.fillStyle='#60a5fa';x.font='bold 28px Arial';x.fillText('Tap “Full Portfolio” for everything →',55,475);
+ const tex=new THREE.CanvasTexture(c);const tm=new THREE.Mesh(new THREE.PlaneGeometry(.9,.58),new THREE.MeshBasicMaterial({map:tex,transparent:true}));
+ tm.position.z=.01;g.add(tm);
+ return g;
+}
+function animate(){renderer.setAnimationLoop(render)}
+function render(t,frame){
+ if(frame){
+  const session=renderer.xr.getSession();
+  if(!hitTestSourceRequested){
+   session.requestReferenceSpace('viewer').then(ref=>session.requestHitTestSource({space:ref})).then(src=>{hitTestSource=src});
+   session.addEventListener('end',()=>{hitTestSource=null;hitTestSourceRequested=false;placed=false});
+   hitTestSourceRequested=true;
+  }
+  if(hitTestSource){
+   const hits=frame.getHitTestResults(hitTestSource);
+   if(hits.length){
+    const pose=hits[0].getPose(renderer.xr.getReferenceSpace('local-floor')||renderer.xr.getReferenceSpace('local'));
+    if(pose){
+      reticle.visible=!placed;reticle.matrix.fromArray(pose.transform.matrix);
+      if(!placed){cardGroup.position.setFromMatrixPosition(reticle.matrix);cardGroup.rotation.set(-Math.PI/2,0,0);cardGroup.visible=true;}
+    }
+   }
+  }
+ }
+ renderer.render(scene,camera);
+}
+renderer?.domElement?.addEventListener('click',()=>{if(reticle.visible&&!placed){placed=true;reticle.visible=false;cardGroup.visible=true}});
+</script>
+</body>
+</html>
