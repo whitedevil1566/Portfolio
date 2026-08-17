@@ -45,3 +45,7 @@ The root page registers `service-worker.js` and provides an offline fallback. Th
 
 ## Content system
 Project metadata lives in `assets/data/projects.json`. The Projects directory reads that file at runtime, so future project additions can be maintained from one place.
+
+
+## Polish update
+This build keeps the original project structure and adds refined motion, active navigation, pointer spotlights, domain consistency, improved PWA cache versioning, and the coach build-note URL in the sitemap.
