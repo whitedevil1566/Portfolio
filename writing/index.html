@@ -1,1 +1,133 @@
-,
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Build notes and writing by Abdullah Afsar about web development, deployment and portfolio engineering.">
+  <link rel="canonical" href="https://portfolio.abdullahafsar.site/writing/">
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/directory.css">
+  <title>Writing — Abdullah Afsar</title>
+
+  <!-- Embedded styling to enhance appearance while keeping original stylesheet links for fallback -->
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --muted:#9aa4b2;
+      --accent:#6ee7b7; /* soft mint */
+      --glass: rgba(255,255,255,0.03);
+      --radius:14px;
+      --gap:20px;
+      color-scheme: dark;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background: linear-gradient(180deg,var(--bg), #071022 120%);
+      color:#e6eef6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      padding-bottom:40px;
+    }
+    .shell{max-width:1100px;margin:0 auto;padding:40px 24px}
+    .site-header{backdrop-filter:blur(6px);background:transparent;padding:18px 0}
+    .nav{display:flex;align-items:center;justify-content:space-between}
+    .brand{display:flex;gap:12px;align-items:center;text-decoration:none;color:inherit;font-weight:600}
+    .brand-mark{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#072032,#0b2638);box-shadow:0 6px 18px rgba(6,13,22,0.6);font-weight:700}
+    .button{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:10px;border:1px solid transparent}
+    .button-ghost{background:var(--glass);border-color:rgba(255,255,255,0.04)}
+
+    .directory{padding-top:20px}
+    .directory-head{display:flex;flex-direction:column;gap:18px;margin-bottom:28px}
+    .eyebrow{color:var(--accent);font-weight:700;letter-spacing:1px;font-size:13px}
+    .directory-head h1{font-size:40px;margin:0;line-height:1.05}
+    .directory-head p{color:var(--muted);max-width:72ch}
+
+    .directory-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--gap);margin-top:6px}
+    .directory-card{display:flex;justify-content:space-between;align-items:stretch;text-decoration:none;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,12,0.6);transition:transform .18s ease,box-shadow .18s ease;border:1px solid rgba(255,255,255,0.03);color:inherit}
+    .directory-card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(3,8,18,0.6)}
+    .directory-card > div:first-child{flex:1}
+    .directory-card span{display:inline-block;font-weight:700;color:var(--accent);font-size:14px}
+    .directory-card small{display:block;color:var(--muted);margin:6px 0}
+    .directory-card h2{margin:6px 0 10px;color:#fff;font-size:18px}
+    .directory-card p{margin:0;color:var(--muted)}
+    .directory-meta{display:flex;flex-direction:column;gap:8px;align-items:flex-end;justify-content:center;margin-left:18px;color:var(--muted)}
+
+    .post-card{display:block;margin-top:28px;padding:22px;border-radius:12px;background:linear-gradient(180deg, rgba(110,231,183,0.04), rgba(255,255,255,0.01));text-decoration:none;color:inherit;border:1px solid rgba(110,231,183,0.06);box-shadow:0 8px 26px rgba(6,12,18,0.5)}
+    .post-card span{font-size:13px;color:var(--accent);font-weight:700}
+    .post-card h2{margin:10px 0 6px}
+    .post-card p{color:var(--muted);margin:0}
+
+    @media (max-width:560px){
+      .directory-head h1{font-size:28px}
+      .shell{padding:24px}
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header scrolled" role="banner">
+    <nav class="nav shell" aria-label="Main">
+      <a class="brand" href="../index.html">
+        <span class="brand-mark" aria-hidden="true">AA</span>
+        <span>Abdullah Afsar</span>
+      </a>
+      <a class="button button-ghost button-small" href="../index.html">← Home</a>
+    </nav>
+  </header>
+
+  <main class="directory" role="main">
+    <div class="shell">
+      <div class="directory-head">
+        <div>
+          <div class="eyebrow">BUILD NOTES</div>
+          <h1>Things I learned<br>by shipping.</h1>
+        </div>
+        <p>Short notes from actual builds. No generic motivation posts — just practical decisions, mistakes and patterns worth remembering.</p>
+      </div>
+
+      <div class="directory-list">
+        <a class="directory-card" href="toruk-makto-league.html">
+          <div>
+            <span>01</span>
+            <small>CASE STUDY · 8 MIN</small>
+            <h2>How I approached the Toruk Makto League build</h2>
+            <p>Information architecture, responsive presentation and making a live sports platform feel intentional.</p>
+          </div>
+          <div class="directory-meta"><span>Case study</span><span>↗</span></div>
+        </a>
+
+        <a class="directory-card" href="portfolio-system.html">
+          <div>
+            <span>02</span>
+            <small>ENGINEERING · 6 MIN</small>
+            <h2>Why a portfolio should be built like a product</h2>
+            <p>Reusable data, case studies, SEO, performance and source structure — not just a pretty homepage.</p>
+          </div>
+          <div class="directory-meta"><span>Engineering</span><span>↗</span></div>
+        </a>
+
+        <a class="directory-card" href="deployment-playbook.html">
+          <div>
+            <span>03</span>
+            <small>DEPLOYMENT · 5 MIN</small>
+            <h2>From local folder to live domain</h2>
+            <p>A practical checklist for GitHub Pages, DNS, custom domains and the final production pass.</p>
+          </div>
+          <div class="directory-meta"><span>Deployment</span><span>↗</span></div>
+        </a>
+      </div>
+
+      <a class="post-card" href="afsar-ali-golf-coaching.html">
+        <span>CASE STUDY · LIVE</span>
+        <h2>Designing a coaching website around one clear next step.</h2>
+        <p>How the Afsar Ali Golf Coaching site turns a service offer into a clear, trust-led booking journey.</p>
+      </a>
+    </div>
+  </main>
+</body>
+</html>
