@@ -1,0 +1,10 @@
+{
+  "name":"Abdullah Afsar — Web Developer",
+  "short_name":"Abdullah Afsar",
+  "start_url":"./index.html",
+  "display":"standalone",
+  "background_color":"#07080b",
+  "theme_color":"#07080b",
+  "description":"Selected work, case studies and build notes by Abdullah Afsar.",
+  "icons":[{"src":"assets/icons/favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
