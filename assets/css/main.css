@@ -445,3 +445,5 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 @media (prefers-reduced-motion: reduce){*,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}.reveal{opacity:1!important;transform:none!important}body:before{display:none}}
 
 body.page-leaving{opacity:0;transform:scale(.995);transition:opacity .17s ease,transform .17s ease}
+
+.github-fallback{padding:18px 0}.github-fallback strong{display:block;color:#eef2f7;font:700 14px Manrope;margin-bottom:4px}.github-fallback p{margin:0 0 8px;color:#7d8797;font-size:12px}.github-fallback a{font:600 11px 'DM Mono',monospace;color:var(--accent);text-decoration:none}.github-fallback a:hover{text-decoration:underline}
