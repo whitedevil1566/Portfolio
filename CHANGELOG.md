@@ -21,3 +21,7 @@
 - Added branded Open Graph card and responsive portrait assets.
 - Added premium pointer/spotlight interaction on fine-pointer devices.
 - Updated service-worker cache for new assets and cache version.
+
+## 2026-08-17 — GitHub reliability fix
+- Added timeout, local snapshot cache and graceful fallback for GitHub API data.
+- Service worker now ignores cross-origin requests and uses cache v4 to avoid stale API behavior.
