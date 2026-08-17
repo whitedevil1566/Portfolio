@@ -1,0 +1,65 @@
+[
+  {
+    "index": "01",
+    "slug": "toruk-makto-league",
+    "name": "Toruk Makto League",
+    "type": "Sports / League Platform",
+    "summary": "A live digital home for Pakistan's golf league, covering league identity, teams, standings, venues, partners, gallery and registration flows.",
+    "role": "Designed & Built",
+    "url": "https://torukmaktoleague.com/",
+    "caseStudy": "../projects/toruk-makto-league.html",
+    "stack": [
+      "Responsive UI",
+      "Information Architecture",
+      "Deployment"
+    ]
+  },
+  {
+    "index": "02",
+    "slug": "z-lane-broast",
+    "name": "Z-Lane Broast",
+    "type": "Restaurant Ordering Website",
+    "summary": "A focused restaurant experience for menu discovery, price visibility and a direct WhatsApp ordering path.",
+    "role": "Designed & Built",
+    "url": "https://whitedevil1566.github.io/Z-Lane-Broast/",
+    "caseStudy": "../projects/z-lane-broast.html",
+    "stack": [
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "Bootstrap"
+    ]
+  },
+  {
+    "index": "03",
+    "slug": "afsar-ali-golf-coaching",
+    "name": "Afsar Ali Golf Coaching",
+    "type": "Golf Coaching Website",
+    "summary": "A premium coaching website for private golf lessons in Karachi, with programs, pricing, gallery, testimonials, FAQ and direct lesson booking paths.",
+    "role": "Designed & Built",
+    "url": "https://coach.abdullahafsar.site/",
+    "caseStudy": "../projects/afsar-ali-golf-coaching.html",
+    "stack": [
+      "Responsive UI",
+      "Content Architecture",
+      "Booking UX",
+      "Deployment"
+    ]
+  },
+  {
+    "index": "04",
+    "slug": "portfolio-system",
+    "name": "Portfolio System",
+    "type": "Personal Product / System",
+    "summary": "A static, maintainable portfolio system with project data, case studies, SEO, PWA support and a professional source structure.",
+    "role": "Designed & Built",
+    "url": "../",
+    "caseStudy": "../",
+    "stack": [
+      "Semantic HTML",
+      "CSS",
+      "JavaScript",
+      "GitHub Pages"
+    ]
+  }
+]
