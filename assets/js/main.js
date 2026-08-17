@@ -56,27 +56,98 @@
     qa('.magnetic').forEach(btn => btn.addEventListener('pointerleave', () => btn.style.transform=''));
   }
 
-  // GitHub public data
+  // GitHub public data — resilient, cached, and never left in a permanent loading state.
   const username = 'whitedevil1566';
-  const ghAvatar = q('#ghAvatar'), ghName = q('#ghName'), ghBio = q('#ghBio'), ghRepos = q('#ghRepos'), ghFollowers = q('#ghFollowers'), ghFollowing = q('#ghFollowing'), repoList = q('#repoList');
-  const loadGitHub = async () => {
+  const ghAvatar = q('#ghAvatar'), ghName = q('#ghName'), ghBio = q('#ghBio'),
+        ghRepos = q('#ghRepos'), ghFollowers = q('#ghFollowers'), ghFollowing = q('#ghFollowing'),
+        repoList = q('#repoList');
+
+  const githubProfileUrl = `https://api.github.com/users/${username}`;
+  const githubReposUrl = `https://api.github.com/users/${username}/repos?per_page=6&sort=updated`;
+  const githubCacheKey = 'abdullah-github-cache-v1';
+
+  const escapeHtml = (s='') => String(s).replace(/[&<>'"]/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','\'':'&#39;','"':'&quot;'
+  }[c]));
+
+  const setGithubFallback = (message = 'GitHub profile is live — open it for the latest public work.') => {
+    if (!ghBio || !repoList) return;
+    ghBio.textContent = message;
+    if (ghRepos) ghRepos.textContent = '—';
+    if (ghFollowers) ghFollowers.textContent = '—';
+    if (ghFollowing) ghFollowing.textContent = '—';
+    repoList.innerHTML = `
+      <div class="repo-placeholder github-fallback">
+        <strong>Public GitHub profile</strong>
+        <p>Live repository data is temporarily unavailable here.</p>
+        <a href="https://github.com/${username}" target="_blank" rel="noopener">Open GitHub ↗</a>
+      </div>`;
+  };
+
+  const fetchJsonWithTimeout = async (url, timeoutMs = 6500) => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
     try {
-      const [uRes, rRes] = await Promise.all([
-        fetch(`https://api.github.com/users/${username}`, { headers: { Accept:'application/vnd.github+json' } }),
-        fetch(`https://api.github.com/users/${username}/repos?per_page=6&sort=updated`, { headers: { Accept:'application/vnd.github+json' } })
-      ]);
-      if (!uRes.ok || !rRes.ok) throw new Error('GitHub API unavailable');
-      const u = await uRes.json(); const repos = await rRes.json();
-      ghAvatar.src = u.avatar_url; ghName.textContent = `${u.name || username} / ${username}`; ghBio.textContent = u.bio || 'Public GitHub profile';
-      ghRepos.textContent = u.public_repos; ghFollowers.textContent = u.followers; ghFollowing.textContent = u.following;
-      repoList.innerHTML = repos.length ? repos.map(r => `<article class="repo"><div><strong>${escapeHtml(r.name)}</strong><p>${escapeHtml(r.description || 'Public repository')}</p></div><a href="${r.html_url}" target="_blank" rel="noopener">Open ↗</a></article>`).join('') : '<div class="repo-placeholder">No public repositories found.</div>';
-    } catch (err) {
-      ghBio.textContent = 'GitHub data could not be loaded right now.';
-      repoList.innerHTML = '<div class="repo-placeholder">See the public profile for the latest repositories.</div>';
+      const response = await fetch(url, {
+        headers: { Accept: 'application/vnd.github+json' },
+        cache: 'no-store',
+        signal: controller.signal
+      });
+      if (!response.ok) throw new Error(`GitHub request failed: ${response.status}`);
+      return await response.json();
+    } finally {
+      clearTimeout(timer);
     }
   };
-  const escapeHtml = (s='') => s.replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\'':'&#39;','"':'&quot;'}[c]));
-  loadGitHub();
+
+  const renderGithub = (profile, repos) => {
+    if (ghAvatar && profile?.avatar_url) {
+      ghAvatar.src = profile.avatar_url;
+      ghAvatar.alt = `${profile.login || username} GitHub avatar`;
+    }
+    if (ghName) ghName.textContent = `${profile?.name || username} / ${username}`;
+    if (ghBio) ghBio.textContent = profile?.bio || 'Public GitHub profile';
+    if (ghRepos) ghRepos.textContent = Number.isFinite(profile?.public_repos) ? profile.public_repos : '—';
+    if (ghFollowers) ghFollowers.textContent = Number.isFinite(profile?.followers) ? profile.followers : '—';
+    if (ghFollowing) ghFollowing.textContent = Number.isFinite(profile?.following) ? profile.following : '—';
+
+    const safeRepos = Array.isArray(repos) ? repos.filter(r => !r.fork).slice(0, 6) : [];
+    if (!repoList) return;
+    repoList.innerHTML = safeRepos.length
+      ? safeRepos.map(r => `
+          <article class="repo">
+            <div>
+              <strong>${escapeHtml(r.name)}</strong>
+              <p>${escapeHtml(r.description || 'Public repository')}</p>
+            </div>
+            <a href="${escapeHtml(r.html_url)}" target="_blank" rel="noopener">Open ↗</a>
+          </article>`).join('')
+      : '<div class="repo-placeholder">No public repositories found.</div>';
+  };
+
+  const loadGitHub = async () => {
+    // Render an instant local snapshot first so the UI never appears stuck.
+    try {
+      const cached = JSON.parse(localStorage.getItem(githubCacheKey) || 'null');
+      if (cached?.profile) renderGithub(cached.profile, cached.repos || []);
+    } catch (_) { /* localStorage can be unavailable in private browsing */ }
+
+    try {
+      const [profile, repos] = await Promise.all([
+        fetchJsonWithTimeout(githubProfileUrl),
+        fetchJsonWithTimeout(githubReposUrl)
+      ]);
+      renderGithub(profile, repos);
+      try {
+        localStorage.setItem(githubCacheKey, JSON.stringify({ profile, repos, savedAt: Date.now() }));
+      } catch (_) { /* ignore storage failures */ }
+    } catch (err) {
+      const hasVisibleData = ghName && ghName.textContent && !/^Abdullah \/ whitedevil1566$/.test(ghName.textContent);
+      if (!hasVisibleData) setGithubFallback('GitHub data is unavailable right now, but the public profile is live.');
+    }
+  };
+
+  if (ghBio || repoList) loadGitHub();
 
   // WhatsApp form
   const form = q('#contactForm');
