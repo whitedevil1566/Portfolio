@@ -22,6 +22,10 @@
 - Added premium pointer/spotlight interaction on fine-pointer devices.
 - Updated service-worker cache for new assets and cache version.
 
-## 2026-08-17 — GitHub reliability fix
-- Added timeout, local snapshot cache and graceful fallback for GitHub API data.
-- Service worker now ignores cross-origin requests and uses cache v4 to avoid stale API behavior.
+## Live-screen + mobile polish update
+- Added real live-project screenshot previews using a public screenshot endpoint.
+- Added a cinematic live-screen gallery for Toruk Makto League, Afsar Ali Golf Coaching and Z-Lane Broast.
+- Added verified GitHub fallback data so the proof section never remains blank or stuck on Loading.
+- Added GitHub local caching and a request timeout.
+- Updated service worker to avoid caching cross-origin API responses and bumped the cache version.
+- Added stronger mobile breakpoints for project previews, stats, proof panels, contact and hero interactions.

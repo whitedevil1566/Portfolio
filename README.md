@@ -49,3 +49,9 @@ Project metadata lives in `assets/data/projects.json`. The Projects directory re
 
 ## Polish update
 This build keeps the original project structure and adds refined motion, active navigation, pointer spotlights, domain consistency, improved PWA cache versioning, and the coach build-note URL in the sitemap.
+
+## Visual proof
+The homepage includes live screenshot previews for the public Toruk Makto League, Afsar Ali Golf Coaching, and Z-Lane Broast sites. These are intentionally loaded as current captures rather than saved static mockups.
+
+## GitHub proof
+The GitHub panel refreshes from the public `whitedevil1566` profile when the API is reachable, caches successful data locally, and falls back to the verified public profile state when the API is unavailable.
